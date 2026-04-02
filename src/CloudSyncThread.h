@@ -11,7 +11,7 @@ public:
 	CCloudSyncThread();
 	virtual ~CCloudSyncThread();
 
-	void Configure(CSupabaseClient *pClient, const CString &roomId, const CString &roomCode, const CString &deviceName, HWND mainHwnd);
+	void Configure(CSupabaseClient *pClient, const CString &roomId, const CString &roomCode, const CString &deviceName, const CString &deviceFingerprint, HWND mainHwnd);
 	void StartSync();
 	void StopSync();
 
@@ -24,5 +24,6 @@ protected:
 	CString m_roomId;
 	CString m_roomCode;
 	CString m_deviceName;
+	CString m_deviceFingerprint;
 	HWND m_mainHwnd;
 };

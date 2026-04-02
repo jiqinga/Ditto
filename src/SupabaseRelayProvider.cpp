@@ -104,7 +104,7 @@ bool CSupabaseRelayProvider::StartBackgroundSync(HWND mainHwnd)
 	}
 
 	TouchDeviceHeartbeat();
-	m_cloudSyncThread.Configure(&m_client, m_roomId, m_roomCode, m_deviceName, mainHwnd);
+	m_cloudSyncThread.Configure(&m_client, m_roomId, m_roomCode, m_deviceName, m_deviceFingerprint, mainHwnd);
 	if (m_cloudSyncThread.IsRunning() == false)
 	{
 		m_cloudSyncThread.StartSync();
@@ -172,7 +172,7 @@ bool CSupabaseRelayProvider::SendClips(CClipList *pClipList)
 		}
 
 		CString messageId;
-		if (m_client.PostMessage(m_roomId, m_deviceName, GetEncryptedEnvelopeContentType(), cipherPayload, payloadHash, messageId, errorMessage) == false)
+		if (m_client.PostMessage(m_roomId, m_deviceFingerprint, GetEncryptedEnvelopeContentType(), cipherPayload, payloadHash, messageId, errorMessage) == false)
 		{
 			Log(StrF(_T("Cloud relay message post failed for clip %d: %s"), pClip->m_id, errorMessage));
 			continue;

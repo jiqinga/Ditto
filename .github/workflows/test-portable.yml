@@ -1,0 +1,49 @@
+name: Portable Test Build
+
+on:
+  push:
+    branches:
+      - feature/cloud-relay-sync
+    paths-ignore:
+      - '**/*.md'
+  workflow_dispatch:
+
+concurrency:
+  group: portable-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SOLUTION_FILE_PATH: CP_Main_10.sln
+  PORTABLE_NAME: DittoPortable_cloud-relay-sync
+
+jobs:
+  build-portable:
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Restore NuGet packages
+        run: nuget restore ${{ env.SOLUTION_FILE_PATH }}
+
+      - name: Build 64bit Release
+        run: msbuild ${{ env.SOLUTION_FILE_PATH }} /p:Configuration=Release /p:Platform=x64
+
+      - name: Build portable zip
+        shell: cmd
+        run: DittoSetup\BuildPortableZIP.bat "%PORTABLE_NAME%" bit64
+
+      - name: Upload portable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.PORTABLE_NAME }}
+          retention-days: 7
+          if-no-files-found: error
+          path: DittoSetup\Output\${{ env.PORTABLE_NAME }}.zip

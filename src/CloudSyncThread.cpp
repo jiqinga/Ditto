@@ -28,12 +28,13 @@ CCloudSyncThread::~CCloudSyncThread()
 {
 }
 
-void CCloudSyncThread::Configure(CSupabaseClient *pClient, const CString &roomId, const CString &roomCode, const CString &deviceName, HWND mainHwnd)
+void CCloudSyncThread::Configure(CSupabaseClient *pClient, const CString &roomId, const CString &roomCode, const CString &deviceName, const CString &deviceFingerprint, HWND mainHwnd)
 {
 	m_pClient = pClient;
 	m_roomId = roomId;
 	m_roomCode = roomCode;
 	m_deviceName = deviceName;
+	m_deviceFingerprint = deviceFingerprint;
 	m_mainHwnd = mainHwnd;
 }
 
@@ -59,7 +60,7 @@ bool CCloudSyncThread::ShouldImportMessage(const SupabaseSyncMessage &message) c
 
 	CString senderDeviceId = message.m_senderDeviceId;
 	senderDeviceId.Trim();
-	if (senderDeviceId.CompareNoCase(m_deviceName) == 0)
+	if (senderDeviceId.CompareNoCase(m_deviceFingerprint) == 0)
 	{
 		return false;
 	}
@@ -127,13 +128,6 @@ bool CCloudSyncThread::BuildClipListFromMessage(const SupabaseSyncMessage &messa
 	{
 		delete pClip;
 		return false;
-	}
-
-	CString senderDeviceId = message.m_senderDeviceId;
-	senderDeviceId.Trim();
-	if (senderDeviceId.IsEmpty() == FALSE)
-	{
-		pClip->m_Desc.AppendFormat(_T("\r\n(%s)"), senderDeviceId);
 	}
 
 	pClipList->AddTail(pClip);
