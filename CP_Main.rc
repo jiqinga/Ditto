@@ -1045,14 +1045,18 @@ STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSM
 CAPTION "Friends"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
+    LTEXT           "Sync Mode",IDC_STATIC_SYNC_MODE,7,11,55,9
+    COMBOBOX        IDC_COMBO_SYNC_MODE,96,8,132,48,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     EDITTEXT        IDC_EDIT_PLACE_ON_CLIPBOARD,96,39,210,13,ES_AUTOHSCROLL
     CONTROL         "Disable Receiving Clips",IDC_CHECK_DISABLE_FRIENDS,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,95,53,146,10
     EDITTEXT        IDC_EDIT_PASSWORD,96,66,210,13,ES_AUTOHSCROLL
     EDITTEXT        IDC_EDIT_ADDITIONAL,95,108,210,12,ES_AUTOHSCROLL
-    CONTROL         "List1",IDC_LIST,"SysListView32",LVS_REPORT | WS_BORDER | WS_TABSTOP,7,186,353,72
+    CONTROL         "List1",IDC_LIST,"SysListView32",LVS_REPORT | WS_BORDER | WS_TABSTOP,7,186,353,58
     CONTROL         "Log Send Receive Commands",IDC_CHECK_LOG_SEND_RECIEVE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,260,353,12
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,260,161,12
+    PUSHBUTTON      "Test Connection",IDC_BUTTON_TEST_SYNC,247,257,54,14
+    PUSHBUTTON      "Reset State",IDC_BUTTON_RESET_SYNC_STATE,306,257,54,14
     LTEXT           "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer.",IDC_STATIC_6,7,159,353,24
     LTEXT           "IP/Computer Names separated by commas",IDC_STATIC_2,7,37,84,17
     LTEXT           "When you receive a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time.",IDC_STATIC_1,7,10,353,26
@@ -1062,6 +1066,21 @@ BEGIN
     CONTROL         "Request using IP Address",IDC_RADIO_USE_IP,"Button",BS_AUTORADIOBUTTON,15,136,98,10
     GROUPBOX        "Remote Files",IDC_STATIC_REMOTE_FILES,7,124,353,29
     CONTROL         "Request using Host Name",IDC_RADIO_USE_HOST_NAME,"Button",BS_AUTORADIOBUTTON,151,136,98,10
+    GROUPBOX        "Cloud Relay",IDC_STATIC_CLOUD_GROUP,7,36,353,213
+    LTEXT           "Supabase URL",IDC_STATIC_CLOUD_URL,16,52,74,9
+    EDITTEXT        IDC_EDIT_CLOUD_URL,96,49,256,13,ES_AUTOHSCROLL
+    LTEXT           "Anon Key",IDC_STATIC_CLOUD_ANON_KEY,16,71,74,9
+    EDITTEXT        IDC_EDIT_CLOUD_ANON_KEY,96,68,256,13,ES_AUTOHSCROLL
+    LTEXT           "Room Code",IDC_STATIC_CLOUD_ROOM_CODE,16,90,74,9
+    EDITTEXT        IDC_EDIT_CLOUD_ROOM_CODE,96,87,145,13,ES_AUTOHSCROLL
+    LTEXT           "Device Name",IDC_STATIC_CLOUD_DEVICE_NAME,16,109,74,9
+    EDITTEXT        IDC_EDIT_CLOUD_DEVICE_NAME,96,106,145,13,ES_AUTOHSCROLL
+    CONTROL         "Connect on startup",IDC_CHECK_CLOUD_CONNECT_STARTUP,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,96,126,92,10
+    LTEXT           "Allowed Content",IDC_STATIC_CLOUD_CONTENT,16,145,74,9
+    CONTROL         "Text",IDC_CHECK_CLOUD_ALLOW_TEXT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,96,144,42,10
+    CONTROL         "HTML",IDC_CHECK_CLOUD_ALLOW_HTML,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,142,144,45,10
+    CONTROL         "RTF",IDC_CHECK_CLOUD_ALLOW_RTF,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,191,144,39,10
 END
 
 IDD_FRIEND_DETAILS DIALOGEX 0, 0, 203, 79

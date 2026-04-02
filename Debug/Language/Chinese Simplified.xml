@@ -299,6 +299,19 @@
 		<Item English_Text = "Request using Host Name" ID = "2129">要求使用主机名称</Item>		
 		<Item English_Text = "Remote Files" ID = "2128">远程文件</Item>
 			
+		<Item English_Text = "Sync Mode" ID = "2203">同步模式</Item>
+		<Item English_Text = "Cloud Relay" ID = "2209">云中继</Item>
+		<Item English_Text = "Supabase URL" ID = "2204">Supabase URL</Item>
+		<Item English_Text = "Anon Key" ID = "2205">匿名密钥</Item>
+		<Item English_Text = "Room Code" ID = "2206">房间代码</Item>
+		<Item English_Text = "Device Name" ID = "2207">设备名称</Item>
+		<Item English_Text = "Connect on startup" ID = "2197">启动时连接</Item>
+		<Item English_Text = "Allowed Content" ID = "2208">允许的内容</Item>
+		<Item English_Text = "Text" ID = "2198">文本</Item>
+		<Item English_Text = "HTML" ID = "2199">HTML</Item>
+		<Item English_Text = "RTF" ID = "2200">RTF</Item>
+		<Item English_Text = "Test Connection" ID = "2201">测试连接</Item>
+		<Item English_Text = "Reset State" ID = "2202">重置状态</Item>
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>
 		<Item English_Text = "Send All Copies to this friend" ID = "1015">将全部复制项目发送给此朋友</Item>
@@ -348,6 +361,17 @@
 		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle">支持类型</Item>
 		<Item English_Text = "Stats" ID = "StatsTitle">统计</Item>
 		<Item English_Text = "Friends" ID = "FriendsTitle">朋友</Item>
+		<Item English_Text = "Direct Friends" ID = "SyncModeDirectFriends">直接好友</Item>
+		<Item English_Text = "Cloud Relay" ID = "SyncModeCloudRelay">云中继</Item>
+		<Item English_Text = "Disabled" ID = "SyncModeDisabled">已禁用</Item>
+		<Item English_Text = "Connection testing is only available for Cloud Relay mode." ID = "CloudRelayTestOnly">仅云中继模式支持连接测试。</Item>
+		<Item English_Text = "Enter Supabase URL, Anon Key, and Room Code before testing the connection." ID = "CloudRelayTestRequiredFields">测试连接前请输入 Supabase URL、匿名密钥和房间代码。</Item>
+		<Item English_Text = "The selected sync mode does not support connection testing." ID = "SyncModeNoConnectionTest">所选同步模式不支持连接测试。</Item>
+		<Item English_Text = "Connection test succeeded." ID = "CloudRelayTestSucceeded">连接测试成功。</Item>
+		<Item English_Text = "Sync state reset is only available for Cloud Relay mode." ID = "CloudRelayResetOnly">仅云中继模式支持重置同步状态。</Item>
+		<Item English_Text = "Enter Room Code before resetting cloud sync state." ID = "CloudRelayResetRequiredFields">重置云同步状态前请输入房间代码。</Item>
+		<Item English_Text = "Local sync state was reset." ID = "CloudRelayResetSucceeded">本地同步状态已重置。</Item>
+		<Item English_Text = "Sync is disabled." ID = "SyncDisabled">同步已禁用。</Item>
 		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle">快速粘贴</Item>
 		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle">键盘快捷键</Item>
 		<Item English_Text = "About Ditto" ID = "AboutTitle">关于 Ditto</Item>

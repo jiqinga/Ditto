@@ -67,6 +67,15 @@
     <ClCompile Include="src\ClipIds.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\CloudSyncThread.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CloudSyncCrypto.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CloudSyncState.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\ConvertRTFToText.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -92,6 +101,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DialogResizer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DirectFriendProvider.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DimWnd.cpp">
@@ -367,6 +379,12 @@
     <ClCompile Include="src\SystemTray.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\SupabaseRelayProvider.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SupabaseClient.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\TabCtrl.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -555,6 +573,15 @@
     <ClInclude Include="src\ClipEditThread.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\CloudSyncThread.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CloudSyncCrypto.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CloudSyncState.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\ClipFormatQListCtrl.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -589,6 +616,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\DialogResizer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DirectFriendProvider.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\DIBAPI.H">
@@ -706,6 +736,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\ImageViewer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ISyncProvider.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\MagneticWnd.h">
@@ -886,6 +919,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\SystemTray.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SupabaseRelayProvider.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SupabaseClient.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\TabCtrl.h">

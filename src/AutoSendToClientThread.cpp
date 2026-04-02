@@ -3,7 +3,6 @@
 #include "Misc.h"
 #include "Options.h"
 #include "CP_Main.h"
-#include "client.h"
 
 CAutoSendToClientThread::CAutoSendToClientThread(void)
 {
@@ -45,7 +44,6 @@ void CAutoSendToClientThread::FireSendToClient(CClipList *pClipList)
 		Log(_T("Error creating thread to send to clients"));
 	}
 }
-
 void CAutoSendToClientThread::OnTimeOut(void *param)
 {
 	Stop(-1);
@@ -91,74 +89,18 @@ void CAutoSendToClientThread::OnSendToClient()
 
 bool CAutoSendToClientThread::SendToClient(CClipList *pClipList)
 {
-	LogSendRecieveInfo("@@@@@@@@@@@@@@@ - START OF SendClientThread - @@@@@@@@@@@@@@@");
-
 	if(pClipList == NULL)
 	{
 		LogSendRecieveInfo("ERROR if(pClipList == NULL)");
 		return FALSE;
 	}
 
-	INT_PTR lCount = pClipList->GetCount();
-
-	LogSendRecieveInfo(StrF(_T("Start of Send ClientThread Count - %d"), lCount));
-
-	for(int nClient = 0; nClient < MAX_SEND_CLIENTS; nClient++)
+	ISyncProvider *pSyncProvider = theApp.GetActiveSyncProvider();
+	if(pSyncProvider == NULL)
 	{
-		if(CGetSetOptions::m_SendClients[nClient].bSendAll && 
-			CGetSetOptions::m_SendClients[nClient].csIP.GetLength() > 0)
-		{
-			CClient client;
-			if(client.OpenConnection(CGetSetOptions::m_SendClients[nClient].csIP) == FALSE)
-			{
-				LogSendRecieveInfo(StrF(_T("ERROR opening connection to %s"), CGetSetOptions::m_SendClients[nClient].csIP));
-
-				if(CGetSetOptions::m_SendClients[nClient].bShownFirstError == FALSE)
-				{
-					CString cs;
-					cs.Format(_T("Error opening connection to %s"), CGetSetOptions::m_SendClients[nClient].csIP);
-					::SendMessage(theApp.m_MainhWnd, WM_SEND_RECIEVE_ERROR, (WPARAM)cs.GetBuffer(cs.GetLength()), 0);
-					cs.ReleaseBuffer();
-
-					CGetSetOptions::m_SendClients[nClient].bShownFirstError = TRUE;
-				}
-
-				continue;
-			}
-
-			//We were connected successfully show an error next time we can't connect
-			CGetSetOptions::m_SendClients[nClient].bShownFirstError = FALSE;
-
-			CClip* pClip;
-			POSITION pos;
-			pos = pClipList->GetHeadPosition();
-			while(pos)
-			{
-				pClip = pClipList->GetNext(pos);
-				if(pClip == NULL)
-				{
-					ASSERT(FALSE);
-					LogSendRecieveInfo("Error in GetNext");
-					break;
-				}
-
-				LogSendRecieveInfo(StrF(_T("Sending clip to %s"), CGetSetOptions::m_SendClients[nClient].csIP));
-
-				if(client.SendItem(pClip, false) == FALSE)
-				{
-					CString cs;
-					cs.Format(_T("Error sending clip to %s"), CGetSetOptions::m_SendClients[nClient].csIP);
-					::SendMessage(theApp.m_MainhWnd, WM_SEND_RECIEVE_ERROR, (WPARAM)cs.GetBuffer(cs.GetLength()), 0);
-					cs.ReleaseBuffer();
-					break;
-				}
-			}
-
-			client.CloseConnection();
-		}
+		LogSendRecieveInfo("ERROR - sync provider not initialized");
+		return FALSE;
 	}
 
-	LogSendRecieveInfo("@@@@@@@@@@@@@@@ - END OF SendClientThread - @@@@@@@@@@@@@@@");
-
-	return TRUE;
+	return pSyncProvider->SendClips(pClipList);
 }

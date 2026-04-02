@@ -7,6 +7,9 @@
 // OptionFriends.h : header file
 //
 #include "OptionsSheet.h"
+#include "Options.h"
+
+class ISyncProvider;
 
 /////////////////////////////////////////////////////////////////////////////
 // COptionFriends dialog
@@ -25,10 +28,20 @@ public:
 	enum { IDD = IDD_OPTIONS_FRIENDS };
 	CButton	m_bDisableRecieve;
 	CButton	m_SendRecieve;
+	CButton	m_chkCloudConnectOnStartup;
+	CButton	m_chkCloudAllowText;
+	CButton	m_chkCloudAllowHtml;
+	CButton	m_chkCloudAllowRtf;
+	CComboBox	m_cbSyncMode;
 	CListCtrl	m_List;
 	CString	m_PlaceOnClipboard;
 	CString	m_csPassword;
 	CString	m_csAdditionalPasswords;
+	CString	m_csCloudSupabaseUrl;
+	CString	m_csCloudSupabaseAnonKey;
+	CString	m_csCloudRoomCode;
+	CString	m_csCloudDeviceName;
+	int		m_nSyncMode;
 	//}}AFX_DATA
 
 
@@ -46,6 +59,11 @@ protected:
 	void InitListCtrlCols();
 	void InsertItems();
 	BOOL EditItem(int nItem);
+	void PopulateSyncModes();
+	void UpdateModeControls();
+	void ShowDirectControls(BOOL show);
+	void ShowCloudControls(BOOL show);
+	ISyncProvider *CreateSelectedProvider(CString &errorMessage);
 
 	CString m_csTitle;
 	COptionsSheet *m_pParent;
@@ -56,6 +74,9 @@ protected:
 	afx_msg void OnDblclkList(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnKeydownList(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnCheckDisableFriends();
+	afx_msg void OnSelchangeSyncMode();
+	afx_msg void OnTestConnection();
+	afx_msg void OnResetSyncState();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

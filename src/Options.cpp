@@ -416,6 +416,17 @@ void CGetSetOptions::ConverSettingsToIni()
 	SetHideDittoOnHotKeyIfAlreadyShown(GetHideDittoOnHotKeyIfAlreadyShown());
 	SetPort(GetPort());
 	SetDisableRecieve(GetDisableRecieve());
+	SetSyncMode(GetSyncMode());
+	SetCloudSyncSupabaseUrl(GetCloudSyncSupabaseUrl());
+	SetCloudSyncSupabaseAnonKey(GetCloudSyncSupabaseAnonKey());
+	SetCloudSyncRoomCode(GetCloudSyncRoomCode());
+	SetCloudSyncDeviceName(GetCloudSyncDeviceName());
+	SetCloudSyncConnectOnStartup(GetCloudSyncConnectOnStartup());
+	SetCloudSyncAllowText(GetCloudSyncAllowText());
+	SetCloudSyncAllowHtml(GetCloudSyncAllowHtml());
+	SetCloudSyncAllowRtf(GetCloudSyncAllowRtf());
+	SetCloudSyncAllowImages(GetCloudSyncAllowImages());
+	SetCloudSyncMaxImageSizeBytes(GetCloudSyncMaxImageSizeBytes());
 
 	LOGFONT font;
 	GetFont(font);
@@ -1490,6 +1501,124 @@ BOOL CGetSetOptions::GetDisableRecieve()
 void CGetSetOptions::SetDisableRecieve(BOOL bVal)
 {
 	SetProfileLong("DisableRecieve", bVal);
+}
+
+void CGetSetOptions::SetSyncMode(long mode)
+{
+	SetProfileLong("SyncMode", mode);
+}
+
+long CGetSetOptions::GetSyncMode()
+{
+	long mode = GetProfileLong("SyncMode", DITTO_SYNC_MODE_DIRECT_FRIENDS);
+
+	if (mode < DITTO_SYNC_MODE_DIRECT_FRIENDS || mode > DITTO_SYNC_MODE_DISABLED)
+	{
+		mode = DITTO_SYNC_MODE_DIRECT_FRIENDS;
+	}
+
+	return mode;
+}
+
+void CGetSetOptions::SetCloudSyncSupabaseUrl(CString val)
+{
+	SetProfileString("CloudSyncSupabaseUrl", val);
+}
+
+CString CGetSetOptions::GetCloudSyncSupabaseUrl()
+{
+	return GetProfileString("CloudSyncSupabaseUrl", _T(""));
+}
+
+void CGetSetOptions::SetCloudSyncSupabaseAnonKey(CString val)
+{
+	SetProfileString("CloudSyncSupabaseAnonKey", val);
+}
+
+CString CGetSetOptions::GetCloudSyncSupabaseAnonKey()
+{
+	return GetProfileString("CloudSyncSupabaseAnonKey", _T(""));
+}
+
+void CGetSetOptions::SetCloudSyncRoomCode(CString val)
+{
+	SetProfileString("CloudSyncRoomCode", val);
+}
+
+CString CGetSetOptions::GetCloudSyncRoomCode()
+{
+	return GetProfileString("CloudSyncRoomCode", _T(""));
+}
+
+void CGetSetOptions::SetCloudSyncDeviceName(CString val)
+{
+	SetProfileString("CloudSyncDeviceName", val);
+}
+
+CString CGetSetOptions::GetCloudSyncDeviceName()
+{
+	CString defaultName = GetComputerName();
+	return GetProfileString("CloudSyncDeviceName", defaultName);
+}
+
+void CGetSetOptions::SetCloudSyncConnectOnStartup(BOOL val)
+{
+	SetProfileLong("CloudSyncConnectOnStartup", val);
+}
+
+BOOL CGetSetOptions::GetCloudSyncConnectOnStartup()
+{
+	return GetProfileLong("CloudSyncConnectOnStartup", TRUE);
+}
+
+void CGetSetOptions::SetCloudSyncAllowText(BOOL val)
+{
+	SetProfileLong("CloudSyncAllowText", val);
+}
+
+BOOL CGetSetOptions::GetCloudSyncAllowText()
+{
+	return GetProfileLong("CloudSyncAllowText", TRUE);
+}
+
+void CGetSetOptions::SetCloudSyncAllowHtml(BOOL val)
+{
+	SetProfileLong("CloudSyncAllowHtml", val);
+}
+
+BOOL CGetSetOptions::GetCloudSyncAllowHtml()
+{
+	return GetProfileLong("CloudSyncAllowHtml", TRUE);
+}
+
+void CGetSetOptions::SetCloudSyncAllowRtf(BOOL val)
+{
+	SetProfileLong("CloudSyncAllowRtf", val);
+}
+
+BOOL CGetSetOptions::GetCloudSyncAllowRtf()
+{
+	return GetProfileLong("CloudSyncAllowRtf", TRUE);
+}
+
+void CGetSetOptions::SetCloudSyncAllowImages(BOOL val)
+{
+	SetProfileLong("CloudSyncAllowImages", val);
+}
+
+BOOL CGetSetOptions::GetCloudSyncAllowImages()
+{
+	return GetProfileLong("CloudSyncAllowImages", FALSE);
+}
+
+void CGetSetOptions::SetCloudSyncMaxImageSizeBytes(long val)
+{
+	SetProfileLong("CloudSyncMaxImageSizeBytes", val);
+}
+
+long CGetSetOptions::GetCloudSyncMaxImageSizeBytes()
+{
+	return GetProfileLong("CloudSyncMaxImageSizeBytes", 5 * 1024 * 1024);
 }
 
 BOOL CGetSetOptions::GetFont(LOGFONT &font)

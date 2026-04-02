@@ -30,4 +30,3 @@ protected:
 	CCriticalSection m_cs;
 	CClipList m_saveClips;
 };
-

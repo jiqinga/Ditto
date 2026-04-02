@@ -547,6 +547,9 @@
     <ClCompile Include="src\ClipEditThread.cpp" />
     <ClCompile Include="src\ClipFormatQListCtrl.cpp" />
     <ClCompile Include="src\ClipIds.cpp" />
+    <ClCompile Include="src\CloudSyncThread.cpp" />
+    <ClCompile Include="src\CloudSyncCrypto.cpp" />
+    <ClCompile Include="src\CloudSyncState.cpp" />
     <ClCompile Include="src\Clip_ImportExport.cpp" />
     <ClCompile Include="src\ConvertRTFToText.cpp" />
     <ClCompile Include="src\CopyProperties.cpp" />
@@ -558,6 +561,7 @@
     <ClCompile Include="src\DatabaseUtilities.cpp" />
     <ClCompile Include="src\DeleteClipData.cpp" />
     <ClCompile Include="src\DialogResizer.cpp" />
+    <ClCompile Include="src\DirectFriendProvider.cpp" />
     <ClCompile Include="src\DimWnd.cpp" />
     <ClCompile Include="src\DittoAddin.cpp" />
     <ClCompile Include="src\DittoAddins.cpp" />
@@ -748,6 +752,8 @@
     </ClCompile>
     <ClCompile Include="src\SymbolEdit.cpp" />
     <ClCompile Include="src\SystemTray.cpp" />
+    <ClCompile Include="src\SupabaseRelayProvider.cpp" />
+    <ClCompile Include="src\SupabaseClient.cpp" />
     <ClCompile Include="src\TabCtrl.cpp" />
     <ClCompile Include="src\Theme.cpp" />
     <ClCompile Include="src\TinyXml\tinystr.cpp">
@@ -815,6 +821,9 @@
     <ClInclude Include="src\ClipEditThread.h" />
     <ClInclude Include="src\ClipFormatQListCtrl.h" />
     <ClInclude Include="src\ClipIds.h" />
+    <ClInclude Include="src\CloudSyncThread.h" />
+    <ClInclude Include="src\CloudSyncCrypto.h" />
+    <ClInclude Include="src\CloudSyncState.h" />
     <ClInclude Include="src\Clip_ImportExport.h" />
     <ClInclude Include="src\ConvertRTFToText.h" />
     <ClInclude Include="src\CopyProperties.h" />
@@ -827,6 +836,7 @@
     <ClInclude Include="src\DatabaseUtilities.h" />
     <ClInclude Include="src\DeleteClipData.h" />
     <ClInclude Include="src\DialogResizer.h" />
+    <ClInclude Include="src\DirectFriendProvider.h" />
     <ClInclude Include="src\DIBAPI.H" />
     <ClInclude Include="src\DimWnd.h" />
     <ClInclude Include="src\DittoAddin.h" />
@@ -868,6 +878,7 @@
     <ClInclude Include="src\ImageFormatAggregator.h" />
     <ClInclude Include="src\ImageHelper.h" />
     <ClInclude Include="src\ImageViewer.h" />
+    <ClInclude Include="src\ISyncProvider.h" />
     <ClInclude Include="src\MagneticWnd.h" />
     <ClInclude Include="src\MainFrm.h" />
     <ClInclude Include="src\MainFrmThread.h" />
@@ -954,6 +965,8 @@
     <ClInclude Include="src\StdAfx.h" />
     <ClInclude Include="src\SymbolEdit.h" />
     <ClInclude Include="src\SystemTray.h" />
+    <ClInclude Include="src\SupabaseRelayProvider.h" />
+    <ClInclude Include="src\SupabaseClient.h" />
     <ClInclude Include="src\TabCtrl.h" />
     <ClInclude Include="src\Theme.h" />
     <ClInclude Include="src\TinyXml\tinystr.h" />

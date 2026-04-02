@@ -35,6 +35,8 @@ BOOL EnsureDirectory(CString csPath);
 BOOL BackupDB(CString dbPath, CString backupPath);
 BOOL RestoreDB(CString backupPath);
 
+BOOL EnsureCloudSyncStateTable();
+
 void ReOrderStickyClips(int parentID, CppSQLite3DB &db);
 
 //BOOL CopyDownDatabase();

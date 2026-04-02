@@ -637,6 +637,24 @@
 #define IDC_STATIC_INPUT                2159
 #define IDC_STATIC_OUTPUT               2160
 #define IDC_LIST_SCRIPTS                2161
+#define IDC_COMBO_SYNC_MODE             2192
+#define IDC_EDIT_CLOUD_URL              2193
+#define IDC_EDIT_CLOUD_ANON_KEY         2194
+#define IDC_EDIT_CLOUD_ROOM_CODE        2195
+#define IDC_EDIT_CLOUD_DEVICE_NAME      2196
+#define IDC_CHECK_CLOUD_CONNECT_STARTUP 2197
+#define IDC_CHECK_CLOUD_ALLOW_TEXT      2198
+#define IDC_CHECK_CLOUD_ALLOW_HTML      2199
+#define IDC_CHECK_CLOUD_ALLOW_RTF       2200
+#define IDC_BUTTON_TEST_SYNC            2201
+#define IDC_BUTTON_RESET_SYNC_STATE     2202
+#define IDC_STATIC_SYNC_MODE            2203
+#define IDC_STATIC_CLOUD_URL            2204
+#define IDC_STATIC_CLOUD_ANON_KEY       2205
+#define IDC_STATIC_CLOUD_ROOM_CODE      2206
+#define IDC_STATIC_CLOUD_DEVICE_NAME    2207
+#define IDC_STATIC_CLOUD_CONTENT        2208
+#define IDC_STATIC_CLOUD_GROUP          2209
 #define IDC_STATIC_RETURN_DESC          2162
 #define IDC_STATIC_SCRIPT               2163
 #define IDC_STATIC_ACTIVE               2164
@@ -881,7 +899,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        394
 #define _APS_NEXT_COMMAND_VALUE         32999
-#define _APS_NEXT_CONTROL_VALUE         2174
+#define _APS_NEXT_CONTROL_VALUE         2210
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif

@@ -3,8 +3,11 @@
 #include "MainFrm.h"
 #include "Misc.h"
 #include ".\cp_main.h"
+#include "CloudSyncThread.h"
+#include "DirectFriendProvider.h"
 #include "server.h"
 #include "Client.h"
+#include "SupabaseRelayProvider.h"
 #include <io.h>
 #include "Path.h"
 #include "Clip_ImportExport.h"
@@ -144,6 +147,7 @@ CCP_MainApp::CCP_MainApp()
 	m_connectOnStartup = -1;
 	m_MainhWnd = NULL;
 	m_pMainFrame = NULL;
+	m_pSyncProvider = NULL;
 	BOOL set = ::AllowSetForegroundWindow(ASFW_ANY);
 
 	m_bShowingQuickPaste = false;
@@ -188,7 +192,11 @@ CCP_MainApp::CCP_MainApp()
 
 CCP_MainApp::~CCP_MainApp()
 {
-	
+	if(m_pSyncProvider)
+	{
+		delete m_pSyncProvider;
+		m_pSyncProvider = NULL;
+	}
 }
 
 BOOL CCP_MainApp::InitInstance()
@@ -565,21 +573,82 @@ void CCP_MainApp::LoadGlobalClips()
 
 void CCP_MainApp::StartStopServerThread()
 {
-	if(CGetSetOptions::GetDisableRecieve() == FALSE && CGetSetOptions::GetAllowFriends())
+	if (CGetSetOptions::GetSyncMode() == DITTO_SYNC_MODE_DISABLED)
 	{
-		AfxBeginThread(MTServerThread, m_MainhWnd);
+		StopServerThread();
+		return;
 	}
-	else
+
+	ISyncProvider *pProvider = GetActiveSyncProvider();
+	if (pProvider)
 	{
-		m_bExitServerThread = true;
-		closesocket(theApp.m_sSocket);
+		pProvider->InitializeFromOptions();
+
+		if (CGetSetOptions::GetSyncMode() != DITTO_SYNC_MODE_CLOUD_RELAY || CGetSetOptions::GetCloudSyncConnectOnStartup())
+		{
+			pProvider->StartBackgroundSync(m_MainhWnd);
+		}
 	}
 }
 
 void CCP_MainApp::StopServerThread()
 {
-	m_bExitServerThread = true;
-	closesocket(theApp.m_sSocket);
+	if (m_pSyncProvider)
+	{
+		m_pSyncProvider->StopBackgroundSync();
+
+		if (CGetSetOptions::GetSyncMode() != DITTO_SYNC_MODE_DIRECT_FRIENDS)
+		{
+			delete m_pSyncProvider;
+			m_pSyncProvider = NULL;
+		}
+	}
+}
+
+ISyncProvider *CCP_MainApp::GetActiveSyncProvider()
+{
+	long syncMode = CGetSetOptions::GetSyncMode();
+
+	if (syncMode == DITTO_SYNC_MODE_DISABLED)
+	{
+		if (m_pSyncProvider)
+		{
+			m_pSyncProvider->StopBackgroundSync();
+			delete m_pSyncProvider;
+			m_pSyncProvider = NULL;
+		}
+
+		return NULL;
+	}
+
+	if (syncMode == DITTO_SYNC_MODE_DIRECT_FRIENDS)
+	{
+		if (m_pSyncProvider == NULL || m_pSyncProvider->GetProviderType() != DITTO_SYNC_PROVIDER_DIRECT_FRIENDS)
+		{
+			if (m_pSyncProvider)
+			{
+				m_pSyncProvider->StopBackgroundSync();
+				delete m_pSyncProvider;
+			}
+
+			m_pSyncProvider = new CDirectFriendProvider();
+		}
+
+		return m_pSyncProvider;
+	}
+
+	if (m_pSyncProvider == NULL || m_pSyncProvider->GetProviderType() != DITTO_SYNC_PROVIDER_SUPABASE_RELAY)
+	{
+		if (m_pSyncProvider)
+		{
+			m_pSyncProvider->StopBackgroundSync();
+			delete m_pSyncProvider;
+		}
+
+		m_pSyncProvider = new CSupabaseRelayProvider();
+	}
+
+	return m_pSyncProvider;
 }
 
 void CCP_MainApp::BeforeMainClose()

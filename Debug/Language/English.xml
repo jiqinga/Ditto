@@ -311,6 +311,19 @@
 		<Item English_Text = "Request using Host Name" ID = "2129"></Item>
 		<Item English_Text = "Remote Files" ID = "2128"></Item>
 			
+		<Item English_Text = "Sync Mode" ID = "2203"></Item>
+		<Item English_Text = "Cloud Relay" ID = "2209"></Item>
+		<Item English_Text = "Supabase URL" ID = "2204"></Item>
+		<Item English_Text = "Anon Key" ID = "2205"></Item>
+		<Item English_Text = "Room Code" ID = "2206"></Item>
+		<Item English_Text = "Device Name" ID = "2207"></Item>
+		<Item English_Text = "Connect on startup" ID = "2197"></Item>
+		<Item English_Text = "Allowed Content" ID = "2208"></Item>
+		<Item English_Text = "Text" ID = "2198"></Item>
+		<Item English_Text = "HTML" ID = "2199"></Item>
+		<Item English_Text = "RTF" ID = "2200"></Item>
+		<Item English_Text = "Test Connection" ID = "2201"></Item>
+		<Item English_Text = "Reset State" ID = "2202"></Item>
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>
 		<Item English_Text = "Send All Copies to this friend" ID = "1015"></Item>
@@ -360,6 +373,17 @@
 		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle"></Item>
 		<Item English_Text = "Stats" ID = "StatsTitle"></Item>
 		<Item English_Text = "Friends" ID = "FriendsTitle"></Item>
+		<Item English_Text = "Direct Friends" ID = "SyncModeDirectFriends"></Item>
+		<Item English_Text = "Cloud Relay" ID = "SyncModeCloudRelay"></Item>
+		<Item English_Text = "Disabled" ID = "SyncModeDisabled"></Item>
+		<Item English_Text = "Connection testing is only available for Cloud Relay mode." ID = "CloudRelayTestOnly"></Item>
+		<Item English_Text = "Enter Supabase URL, Anon Key, and Room Code before testing the connection." ID = "CloudRelayTestRequiredFields"></Item>
+		<Item English_Text = "The selected sync mode does not support connection testing." ID = "SyncModeNoConnectionTest"></Item>
+		<Item English_Text = "Connection test succeeded." ID = "CloudRelayTestSucceeded"></Item>
+		<Item English_Text = "Sync state reset is only available for Cloud Relay mode." ID = "CloudRelayResetOnly"></Item>
+		<Item English_Text = "Enter Room Code before resetting cloud sync state." ID = "CloudRelayResetRequiredFields"></Item>
+		<Item English_Text = "Local sync state was reset." ID = "CloudRelayResetSucceeded"></Item>
+		<Item English_Text = "Sync is disabled." ID = "SyncDisabled"></Item>
 		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle"></Item>
 		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle"></Item>
 		<Item English_Text = "About Ditto" ID = "AboutTitle"></Item>

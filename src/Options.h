@@ -6,6 +6,14 @@
 #include <set>
 
 #define MAX_SEND_CLIENTS	15
+
+enum DittoSyncMode
+{
+	DITTO_SYNC_MODE_DIRECT_FRIENDS = 0,
+	DITTO_SYNC_MODE_CLOUD_RELAY = 1,
+	DITTO_SYNC_MODE_DISABLED = 2
+};
+
 class CSendClients
 {
 public:
@@ -263,6 +271,29 @@ public:
 
 	static BOOL		GetDisableRecieve();
 	static void		SetDisableRecieve(BOOL bVal);
+
+	static void		SetSyncMode(long mode);
+	static long		GetSyncMode();
+	static void		SetCloudSyncSupabaseUrl(CString val);
+	static CString	GetCloudSyncSupabaseUrl();
+	static void		SetCloudSyncSupabaseAnonKey(CString val);
+	static CString	GetCloudSyncSupabaseAnonKey();
+	static void		SetCloudSyncRoomCode(CString val);
+	static CString	GetCloudSyncRoomCode();
+	static void		SetCloudSyncDeviceName(CString val);
+	static CString	GetCloudSyncDeviceName();
+	static void		SetCloudSyncConnectOnStartup(BOOL val);
+	static BOOL		GetCloudSyncConnectOnStartup();
+	static void		SetCloudSyncAllowText(BOOL val);
+	static BOOL		GetCloudSyncAllowText();
+	static void		SetCloudSyncAllowHtml(BOOL val);
+	static BOOL		GetCloudSyncAllowHtml();
+	static void		SetCloudSyncAllowRtf(BOOL val);
+	static BOOL		GetCloudSyncAllowRtf();
+	static void		SetCloudSyncAllowImages(BOOL val);
+	static BOOL		GetCloudSyncAllowImages();
+	static void		SetCloudSyncMaxImageSizeBytes(long val);
+	static long		GetCloudSyncMaxImageSizeBytes();
 
 	static BOOL		GetFont(LOGFONT &font);
 	static void		SetFont(LOGFONT &font);

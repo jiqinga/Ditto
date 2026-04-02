@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 #include "CP_Main.h"
+#include "CloudSyncState.h"
 #include "DatabaseUtilities.h"
 #include "ProcessPaste.h"
 #include <io.h>
@@ -193,6 +194,16 @@ BOOL IsDatabaseOpen()
 	return theApp.m_db.IsDatabaseOpen();
 }
 
+BOOL EnsureCloudSyncStateTable()
+{
+	if (theApp.m_db.IsDatabaseOpen() == FALSE)
+	{
+		return FALSE;
+	}
+
+	return CCloudSyncState::EnsureSchema(theApp.m_db);
+}
+
 BOOL OpenDatabase(CString dbPath)
 {
 	try
@@ -216,6 +227,8 @@ BOOL OpenDatabase(CString dbPath)
 
 		theApp.m_db.setBusyTimeout(CGetSetOptions::GetDbTimeout());
 		theApp.m_db.SetRegexCaseInsensitive(CGetSetOptions::GetRegexCaseInsensitive());
+
+		EnsureCloudSyncStateTable();
 
 		return TRUE;
 	}
@@ -482,6 +495,8 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_ShortCut2 on Main(lShortCut DESC, globalShortCut DESC)"));
 		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_MoveToGroup on Main(MoveToGroupShortCut DESC, GlobalMoveToGroupShortCut DESC)"));
 		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_CRC on Main(CRC ASC)"));
+
+		CCloudSyncState::EnsureSchema(db);
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
 
@@ -764,6 +779,8 @@ BOOL CreateDB(CString csFile)
 		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_ShortCut2 on Main(lShortCut DESC, globalShortCut DESC)"));
 		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_MoveToGroup on Main(MoveToGroupShortCut DESC, GlobalMoveToGroupShortCut DESC)"));
 		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_CRC on Main(CRC ASC)"));
+
+		CCloudSyncState::EnsureSchema(db);
 
 		db.close();
 	}

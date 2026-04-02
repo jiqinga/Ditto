@@ -163,7 +163,7 @@ void CMainFrmThread::OnSaveClips()
 			theApp.m_pMainFrame->PostMessageW(WM_SHOW_MSG_WINDOW, (WPARAM) pMsg, pLocalClips->GetTail()->m_parentId);
 		}
 	
-		if(CGetSetOptions::m_lAutoSendClientCount > 0)
+		if(CGetSetOptions::m_lAutoSendClientCount > 0 || CGetSetOptions::GetSyncMode() == DITTO_SYNC_MODE_CLOUD_RELAY)
 		{
 			m_sendToClientThread.FireSendToClient(pLocalClips);
 		}		

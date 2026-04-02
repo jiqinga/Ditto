@@ -20,6 +20,7 @@
 #include "DittoAddins.h"
 #include "externalwindowtracker.h"
 #include "HotKeys.h"
+#include "ISyncProvider.h"
 #include "UAC_Thread.h"
 #include "ICU_String.h"
 #include "ClipEditThread.h"
@@ -157,6 +158,7 @@ public:
 	SOCKET	m_sSocket;
 	void	StartStopServerThread();
 	void	StopServerThread();
+	ISyncProvider *GetActiveSyncProvider();
 
 	long	m_lClipsSent;
 	long	m_lClipsRecieved;
@@ -215,6 +217,7 @@ public:
 protected:
 	void ShowCommandLineError(CString csTitle, CString csMessage);
 	CUAC_Thread* m_pUacPasteThread;
+	ISyncProvider *m_pSyncProvider;
 
 	int m_activeGroupId;
 	DWORD m_activeGroupStartTime;
