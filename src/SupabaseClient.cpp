@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SupabaseClient.h"
 #include "Misc.h"
-#include "Shared/TextConvert.h"
+#include "..\Shared\TextConvert.h"
 
 #include <winhttp.h>
 

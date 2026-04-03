@@ -7,7 +7,7 @@
 #include "Md5.h"
 #include "Misc.h"
 #include "Options.h"
-#include "Shared/TextConvert.h"
+#include "..\Shared\TextConvert.h"
 
 namespace
 {

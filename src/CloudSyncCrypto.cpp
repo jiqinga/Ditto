@@ -2,7 +2,7 @@
 #include "CloudSyncCrypto.h"
 #include "Md5.h"
 #include "Misc.h"
-#include "Shared/TextConvert.h"
+#include "..\Shared\TextConvert.h"
 
 #include <bcrypt.h>
 #include <vector>

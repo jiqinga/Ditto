@@ -4,7 +4,7 @@
 #include "CloudSyncCrypto.h"
 #include "CP_Main.h"
 #include "Misc.h"
-#include "Shared/TextConvert.h"
+#include "..\Shared\TextConvert.h"
 
 namespace
 {
