@@ -620,29 +620,29 @@ CString CSupabaseClient::BuildAuthHeader() const
 CStringA CSupabaseClient::BuildRoomLookupJson(const CString &lookupKey, const CString &roomSalt) const
 {
 	json::JSON payload(json::JSON::Class::Object);
-	payload["lookup_key"] = CTextConvert::UnicodeToUTF8(lookupKey).GetString();
-	payload["salt"] = CTextConvert::UnicodeToUTF8(roomSalt).GetString();
+	payload["lookup_key"] = json::JSON((LPCSTR)CTextConvert::UnicodeToUTF8(lookupKey));
+	payload["salt"] = json::JSON((LPCSTR)CTextConvert::UnicodeToUTF8(roomSalt));
 	return CStringA(payload.dump().c_str());
 }
 
 CStringA CSupabaseClient::BuildDeviceJson(const CString &roomId, const CString &deviceName, const CString &deviceFingerprint) const
 {
 	json::JSON payload(json::JSON::Class::Object);
-	payload["room_id"] = CTextConvert::UnicodeToUTF8(roomId).GetString();
-	payload["device_name"] = CTextConvert::UnicodeToUTF8(deviceName).GetString();
-	payload["device_fingerprint"] = CTextConvert::UnicodeToUTF8(deviceFingerprint).GetString();
+	payload["room_id"] = json::JSON((LPCSTR)CTextConvert::UnicodeToUTF8(roomId));
+	payload["device_name"] = json::JSON((LPCSTR)CTextConvert::UnicodeToUTF8(deviceName));
+	payload["device_fingerprint"] = json::JSON((LPCSTR)CTextConvert::UnicodeToUTF8(deviceFingerprint));
 	return CStringA(payload.dump().c_str());
 }
 
 CStringA CSupabaseClient::BuildMessageJson(const CString &roomId, const CString &senderDeviceId, const CString &contentType, const CStringA &payloadInline, const CString &payloadHash) const
 {
 	json::JSON payload(json::JSON::Class::Object);
-	payload["room_id"] = CTextConvert::UnicodeToUTF8(roomId).GetString();
-	payload["sender_device_id"] = CTextConvert::UnicodeToUTF8(senderDeviceId).GetString();
-	payload["content_type"] = CTextConvert::UnicodeToUTF8(contentType).GetString();
-	payload["payload_mode"] = "inline";
-	payload["payload_inline"] = std::string(payloadInline);
-	payload["payload_hash"] = CTextConvert::UnicodeToUTF8(payloadHash).GetString();
+	payload["room_id"] = json::JSON((LPCSTR)CTextConvert::UnicodeToUTF8(roomId));
+	payload["sender_device_id"] = json::JSON((LPCSTR)CTextConvert::UnicodeToUTF8(senderDeviceId));
+	payload["content_type"] = json::JSON((LPCSTR)CTextConvert::UnicodeToUTF8(contentType));
+	payload["payload_mode"] = json::JSON("inline");
+	payload["payload_inline"] = json::JSON(std::string(payloadInline));
+	payload["payload_hash"] = json::JSON((LPCSTR)CTextConvert::UnicodeToUTF8(payloadHash));
 	return CStringA(payload.dump().c_str());
 }
 

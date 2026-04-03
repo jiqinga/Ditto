@@ -5,9 +5,11 @@
 #include "..\Shared\TextConvert.h"
 
 #include <bcrypt.h>
+#include <wincrypt.h>
 #include <vector>
 
 #pragma comment(lib, "bcrypt.lib")
+#pragma comment(lib, "crypt32.lib")
 
 namespace
 {
