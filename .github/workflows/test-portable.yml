@@ -40,10 +40,19 @@ jobs:
         shell: cmd
         run: DittoSetup\BuildPortableZIP.bat "%PORTABLE_NAME%" bit64
 
+      - name: Expand portable package for artifact upload
+        shell: pwsh
+        run: |
+          $artifactDir = "DittoSetup\Output\portable-artifact"
+          if (Test-Path $artifactDir) {
+            Remove-Item $artifactDir -Recurse -Force
+          }
+          Expand-Archive -Path "DittoSetup\Output\${{ env.PORTABLE_NAME }}.zip" -DestinationPath $artifactDir
+
       - name: Upload portable artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.PORTABLE_NAME }}
           retention-days: 7
           if-no-files-found: error
-          path: DittoSetup\Output\${{ env.PORTABLE_NAME }}.zip
+          path: DittoSetup\Output\portable-artifact\*
