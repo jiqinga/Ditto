@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "tinyxml\Tinyxml.h"
 #include "tinyxml\tinystr.h"
@@ -38,6 +38,13 @@ public:
 	COLORREF SearchTextBoxFocusText() const { return m_searchTextBoxFocusText; }
 	COLORREF SearchTextBoxFocusBorder() const { return m_searchTextBoxFocusBorder; }
 	COLORREF SearchTextHighlight() const { return m_searchTextHighlight; }
+	COLORREF SearchBarBackground() const { return m_searchBarBackground; }
+	COLORREF SearchBarBorder() const { return m_searchBarBorder; }
+	COLORREF SearchBarInactiveText() const { return m_searchBarInactiveText; }
+	COLORREF ListBorder() const { return m_listBorder; }
+	COLORREF GroupHeaderBackground() const { return m_groupHeaderBackground; }
+	COLORREF GroupHeaderText() const { return m_groupHeaderText; }
+	COLORREF EmptyStateBackground() const { return m_emptyStateBackground; }
 
 	COLORREF GroupTreeBG() const { return m_groupTreeBG; }
 	COLORREF GroupTreeText() const { return m_groupTreeText; }
@@ -93,6 +100,13 @@ protected:
 	COLORREF m_searchTextBoxFocusText;
 	COLORREF m_searchTextBoxFocusBorder;
 	COLORREF m_searchTextHighlight;
+	COLORREF m_searchBarBackground;
+	COLORREF m_searchBarBorder;
+	COLORREF m_searchBarInactiveText;
+	COLORREF m_listBorder;
+	COLORREF m_groupHeaderBackground;
+	COLORREF m_groupHeaderText;
+	COLORREF m_emptyStateBackground;
 
 	COLORREF m_groupTreeBG;
 	COLORREF m_groupTreeText;

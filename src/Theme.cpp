@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include ".\theme.h"
 #include "..\Shared\TextConvert.h"
 #include "Misc.h"
@@ -49,8 +49,15 @@ void CTheme::LoadDefaults()
 	m_mainWindowBG = RGB(240, 240, 240);
 	m_searchTextBoxFocusBG = RGB(255, 255, 255);
 	m_searchTextBoxFocusText = RGB(0, 0, 0);
-	m_searchTextBoxFocusBorder = RGB(255, 255, 255);
+	m_searchTextBoxFocusBorder = RGB(76, 132, 255);
 	m_searchTextHighlight = RGB(255, 0, 0);
+	m_searchBarBackground = RGB(248, 249, 251);
+	m_searchBarBorder = RGB(214, 220, 228);
+	m_searchBarInactiveText = RGB(120, 128, 140);
+	m_listBorder = RGB(225, 229, 235);
+	m_groupHeaderBackground = RGB(245, 247, 250);
+	m_groupHeaderText = RGB(95, 103, 115);
+	m_emptyStateBackground = RGB(248, 250, 252);
 
 	m_groupTreeBG = RGB(240, 240, 240);
 	m_groupTreeText = RGB(127, 127, 127);
@@ -172,6 +179,13 @@ bool CTheme::Load(CString csTheme, bool bHeaderOnly, bool bCheckLastWriteTime)
 	LoadColor(ItemHeader, "SearchTextBoxFocusText", m_searchTextBoxFocusText);
 	LoadColor(ItemHeader, "SearchTextBoxFocusBorder", m_searchTextBoxFocusBorder);
 	LoadColor(ItemHeader, "SearchTextHighlight", m_searchTextHighlight);
+	LoadColor(ItemHeader, "SearchBarBackground", m_searchBarBackground);
+	LoadColor(ItemHeader, "SearchBarBorder", m_searchBarBorder);
+	LoadColor(ItemHeader, "SearchBarInactiveText", m_searchBarInactiveText);
+	LoadColor(ItemHeader, "ListBorder", m_listBorder);
+	LoadColor(ItemHeader, "GroupHeaderBackground", m_groupHeaderBackground);
+	LoadColor(ItemHeader, "GroupHeaderText", m_groupHeaderText);
+	LoadColor(ItemHeader, "EmptyStateBackground", m_emptyStateBackground);
 
 	LoadColor(ItemHeader, "Border", m_Border);
 	LoadColor(ItemHeader, "BorderTopMost", m_BorderTopMost);

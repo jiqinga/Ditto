@@ -1,4 +1,4 @@
-//
+﻿//
 // GdipButton.cpp : Version 1.0 - see article at CodeProject.com
 //
 // Author:  Darren Sessions
@@ -42,6 +42,7 @@ static char THIS_FILE[] = __FILE__;
 
 CGdipButton::CGdipButton()
 {
+	m_visualStyle = ButtonVisualStyle_Transparent;
 	m_pStdImage = NULL;
 	m_pAltImage = NULL;
 
@@ -286,6 +287,7 @@ HBRUSH CGdipButton::CtlColor(CDC* pScreenDC, UINT nCtlColor)
 			if (m_dcStdP.m_hDC == NULL)
 			{
 				PaintBk(pDC);
+				PaintStateBackground(pDC, rect, TRUE);
 
 				//graphics.DrawImage(*m_pStdImage, 1, 1);
 
@@ -313,6 +315,7 @@ HBRUSH CGdipButton::CtlColor(CDC* pScreenDC, UINT nCtlColor)
 			if(m_dcStdH.m_hDC == NULL)
 			{
 				PaintBk(pDC);
+				PaintStateBackground(pDC, rect, FALSE);
 
 				ColorMatrix HotMat = {	1.05f, 0.00f, 0.00f, 0.00f, 0.00f,
 										0.00f, 1.05f, 0.00f, 0.00f, 0.00f,
@@ -383,6 +386,7 @@ HBRUSH CGdipButton::CtlColor(CDC* pScreenDC, UINT nCtlColor)
 			if( (m_dcAltP.m_hDC == NULL) && m_bHaveAltImage )
 			{
 				PaintBk(pDC);
+				PaintStateBackground(pDC, rect, TRUE);
 
 				graphics.DrawImage(*m_pAltImage, 1, 1);
 			
@@ -397,6 +401,7 @@ HBRUSH CGdipButton::CtlColor(CDC* pScreenDC, UINT nCtlColor)
 			if(m_dcAltH.m_hDC == NULL)
 			{
 				PaintBk(pDC);
+				PaintStateBackground(pDC, rect, FALSE);
 
 				ColorMatrix HotMat = {	1.05f, 0.00f, 0.00f, 0.00f, 0.00f,
 										0.00f, 1.05f, 0.00f, 0.00f, 0.00f,
@@ -451,6 +456,64 @@ void CGdipButton::PaintBtn(CDC *pDC)
 	CRect rect;
 	GetClientRect(rect);
 	pDC->BitBlt(0, 0, rect.Width(), rect.Height(), m_pCurBtn, 0, 0, SRCCOPY);
+}
+
+void CGdipButton::PaintStateBackground(CDC *pDC, const CRect &rect, BOOL bIsPressed)
+{
+	if(m_visualStyle != ButtonVisualStyle_RoundedFill)
+	{
+		return;
+	}
+
+	COLORREF accent = CGetSetOptions::m_Theme.SearchTextBoxFocusBorder();
+	const BYTE red = GetRValue(accent);
+	const BYTE green = GetGValue(accent);
+	const BYTE blue = GetBValue(accent);
+
+	BYTE fillAlpha = 0;
+	BYTE borderAlpha = 0;
+	if(bIsPressed)
+	{
+		fillAlpha = 38;
+		borderAlpha = 0;
+	}
+	else if(m_bIsHovering)
+	{
+		fillAlpha = 18;
+		borderAlpha = 42;
+	}
+
+	if(fillAlpha == 0 && borderAlpha == 0)
+	{
+		return;
+	}
+
+	Gdiplus::Graphics graphics(pDC->m_hDC);
+	graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
+
+	const int inset = 2;
+	const int diameter = min(max(0, rect.Width() - (inset * 2)), max(0, rect.Height() - (inset * 2)));
+	if(diameter <= 0)
+	{
+		return;
+	}
+
+	const int x = rect.left + ((rect.Width() - diameter) / 2);
+	const int y = rect.top + ((rect.Height() - diameter) / 2);
+	Gdiplus::GraphicsPath path;
+	path.AddEllipse((Gdiplus::REAL)x, (Gdiplus::REAL)y, (Gdiplus::REAL)diameter, (Gdiplus::REAL)diameter);
+
+	if(fillAlpha > 0)
+	{
+		Gdiplus::SolidBrush brush(Gdiplus::Color(fillAlpha, red, green, blue));
+		graphics.FillPath(&brush, &path);
+	}
+
+	if(borderAlpha > 0)
+	{
+		Gdiplus::Pen pen(Gdiplus::Color(borderAlpha, red, green, blue), 1.0f);
+		graphics.DrawPath(&pen, &path);
+	}
 }
 
 //=============================================================================
@@ -701,6 +764,13 @@ void CGdipButton::InitToolTip()
 		m_pToolTip->Activate(TRUE);
 	}
 } 
+
+//=============================================================================
+void CGdipButton::SetVisualStyle(ButtonVisualStyle style)
+{
+	m_visualStyle = style;
+	Invalidate();
+}
 
 //=============================================================================
 void CGdipButton::DeleteToolTip()

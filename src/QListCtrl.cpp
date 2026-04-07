@@ -24,8 +24,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#define ROW_BOTTOM_BORDER		4
-#define ROW_LEFT_BORDER			3
+#define ROW_BOTTOM_BORDER		10
+#define ROW_LEFT_BORDER			10
 #define COLOR_SHADOW			RGB(245, 245, 245)
 #define DUMMY_COL_WIDTH			2
 
@@ -208,7 +208,7 @@ CQListCtrl::CQListCtrl()
 	m_pToolTip = NULL;
 	m_pFormatter = NULL;
 	m_allSelected = false;
-	m_rowHeight = 50;
+	m_rowHeight = 58;
 	m_mouseOverScrollAreaStart = 0;
 	m_showIfClipWasPasted = TRUE;
 	m_bShowTextForFirstTenHotKeys = true;
@@ -478,6 +478,9 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			csText = csText.Mid(nSymEnd + 1);
 		}
 
+		CRect rowRect = rcItem;
+		rowRect.DeflateRect(m_windowDpi->Scale(4), m_windowDpi->Scale(3));
+
 		// Draw the background of the list item.  Colors are selected
 		// according to the item's state.
 		if (rItem.state & LVIS_SELECTED)
@@ -508,10 +511,16 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			}
 		}
 
-		pDC->FillSolidRect(rcItem, crBkgnd);
+		CPen rowBorderPen(PS_SOLID, 1, CGetSetOptions::m_Theme.ListBorder());
+		CPen* pOldPen = pDC->SelectObject(&rowBorderPen);
+		CBrush rowBrush(crBkgnd);
+		CBrush* pOldBrush = pDC->SelectObject(&rowBrush);
+		pDC->RoundRect(rowRect.left, rowRect.top, rowRect.right, rowRect.bottom, m_windowDpi->Scale(10), m_windowDpi->Scale(10));
+		pDC->SelectObject(pOldBrush);
+		pDC->SelectObject(pOldPen);
 		nOldBKMode = pDC->SetBkMode(TRANSPARENT);
 
-		CRect rcText = rcItem;
+		CRect rcText = rowRect;
 		rcText.left += m_windowDpi->Scale(ROW_LEFT_BORDER);
 		rcText.top += m_windowDpi->Scale(1);
 		rcText.bottom -= m_windowDpi->Scale(1);
@@ -520,7 +529,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			strSymbols.GetLength() > 0 &&
 			strSymbols.Find(_T("<pasted>")) >= 0) //clip was pasted from ditto
 		{
-			CRect pastedRect(rcItem);
+			CRect pastedRect(rowRect);
 			pastedRect.left++;
 			pastedRect.right = pastedRect.left + m_windowDpi->Scale(2);
 
@@ -620,7 +629,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			GetWindowRect(crClient);
 			ScreenToClient(crClient);
 
-			CRect crHotKey = rcItem;
+			CRect crHotKey = rowRect;
 
 			int extraFromClipWasPaste = 0;
 			if (m_showIfClipWasPasted)
@@ -638,8 +647,8 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 
 			pDC->DrawText(cs, crHotKey, DT_BOTTOM);
 
-			pDC->MoveTo(CPoint(rcItem.left + m_windowDpi->Scale(8 + extraFromClipWasPaste), rcItem.top));
-			pDC->LineTo(CPoint(rcItem.left + m_windowDpi->Scale(8 + extraFromClipWasPaste), rcItem.bottom));
+			pDC->MoveTo(CPoint(rowRect.left + m_windowDpi->Scale(8 + extraFromClipWasPaste), rowRect.top));
+			pDC->LineTo(CPoint(rowRect.left + m_windowDpi->Scale(8 + extraFromClipWasPaste), rowRect.bottom));
 
 			pDC->SelectObject(hOldFont);
 			pDC->SetTextColor(localOldTextColor);
@@ -2307,7 +2316,7 @@ void CQListCtrl::CreateSmallFont()
 	lf.lfClipPrecision = CLIP_STROKE_PRECIS;
 	lf.lfQuality = DEFAULT_QUALITY;
 	lf.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE;
-	lstrcpy(lf.lfFaceName, _T("Small Font"));
+	lstrcpy(lf.lfFaceName, _T("Segoe UI"));
 
 	m_SmallFont = ::CreateFontIndirect(&lf);
 }

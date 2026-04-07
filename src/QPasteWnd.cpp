@@ -409,7 +409,8 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_search.Create(WS_TABSTOP | WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL, CRect(0, 0, 0, 0), this, ID_EDIT_SEARCH);
 	m_search.SetDpiInfo(&m_DittoWindow.m_dpi);
-	m_search.SetPromptText(theApp.m_Language.GetString(_T("Search"), _T("Search")));
+	m_search.SetPromptText(theApp.m_Language.GetString(_T("Search"), _T("Search clips, groups, and text")));
+	m_search.SetPromptTextColor(CGetSetOptions::m_Theme.SearchBarInactiveText());
 	::SHAutoComplete(m_search.m_hWnd, SHACF_AUTOSUGGEST_FORCE_OFF);
 	SetSearchImages();
 	m_search.LoadPastSearches(CGetSetOptions::GetPastSearchXml());
@@ -460,16 +461,19 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_ShowGroupsFolderBottom.ShowWindow(SW_SHOW);
 	m_ShowGroupsFolderBottom.SetToolTipText(theApp.m_Language.GetString(_T("GroupsTooltip"), _T("Groups")));
 	m_ShowGroupsFolderBottom.ModifyStyle(WS_TABSTOP, 0);
+	m_ShowGroupsFolderBottom.SetVisualStyle(CGdipButton::ButtonVisualStyle_RoundedFill);
 
 	m_BackButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_BACK_BUTTON);
 	m_BackButton.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPI(), return_16, return_20, return_24, return_28, return_32, _T("PNG"));
 	m_BackButton.ModifyStyle(WS_TABSTOP, 0);
 	m_BackButton.ShowWindow(SW_SHOW);
+	m_BackButton.SetVisualStyle(CGdipButton::ButtonVisualStyle_RoundedFill);
 
 	m_systemMenu.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SYSTEM_BUTTON);
 	m_systemMenu.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPI(), system_menu_2_24, system_menu_2_30, system_menu_2_36, system_menu_2_42, system_menu_2_48, _T("PNG"), system_menu_54, system_menu_60, system_menu_66, system_menu_72, system_menu_78, system_menu_84);
 	m_systemMenu.ModifyStyle(WS_TABSTOP, 0);
 	m_systemMenu.ShowWindow(SW_SHOW);
+	m_systemMenu.SetVisualStyle(CGdipButton::ButtonVisualStyle_RoundedFill);
 
 	m_stGroup.Create(_T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, ID_GROUP_TEXT);
 
@@ -506,7 +510,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_alwaysOnToWarningStatic.SetToggleCursor(true);
 	m_alwaysOnToWarningStatic.SetFont(&m_groupFont);
 
-	m_noSearchResultsStatic.Create(onTopMsg, WS_CHILD, CRect(0, 0, 0, 0), this, ID_NO_SEARCH_RESULTS);
+	m_noSearchResultsStatic.Create(onTopMsg, WS_CHILD | SS_CENTER, CRect(0, 0, 0, 0), this, ID_NO_SEARCH_RESULTS);
 
 	m_popupMsg.m_hWndPosRelativeTo = m_hWnd;
 
@@ -673,10 +677,13 @@ void CQPasteWnd::MoveControls()
 		m_stGroup.ShowWindow(SW_SHOW);
 		m_BackButton.ShowWindow(SW_SHOW);
 
-		m_BackButton.MoveWindow(m_DittoWindow.m_dpi.Scale(2), m_DittoWindow.m_dpi.Scale(2), m_DittoWindow.m_dpi.Scale(16), m_DittoWindow.m_dpi.Scale(16));
-		m_stGroup.MoveWindow(m_DittoWindow.m_dpi.Scale(24), m_DittoWindow.m_dpi.Scale(2), cx - m_DittoWindow.m_dpi.Scale(20), m_DittoWindow.m_dpi.Scale(16));
+		int groupHeaderPadding = m_DittoWindow.m_dpi.Scale(10);
+		int groupHeaderHeight = m_DittoWindow.m_dpi.Scale(30);
+		int backButtonSize = m_DittoWindow.m_dpi.Scale(26);
+		m_BackButton.MoveWindow(groupHeaderPadding, m_DittoWindow.m_dpi.Scale(3), backButtonSize, backButtonSize);
+		m_stGroup.MoveWindow(m_DittoWindow.m_dpi.Scale(42), m_DittoWindow.m_dpi.Scale(2), cx - m_DittoWindow.m_dpi.Scale(54), groupHeaderHeight);
 
-		topOfListBox = m_DittoWindow.m_dpi.Scale(20);
+		topOfListBox = m_DittoWindow.m_dpi.Scale(36);
 	}
 	else
 	{
@@ -684,7 +691,7 @@ void CQPasteWnd::MoveControls()
 		m_stGroup.ShowWindow(SW_HIDE);
 	}
 
-	int searchRowStart = 33;
+	int searchRowStart = 40;
 
 	/*if(CGetSetOptions::m_bShowPersistent)
 	{
@@ -708,7 +715,7 @@ void CQPasteWnd::MoveControls()
 		CRect r;
 		m_lstHeader.GetWindowRect(&r);
 
-		rgnRect.CreateRectRgn(0, 0, cx, (cy - listBoxBottomOffset - topOfListBox) );
+		rgnRect.CreateRectRgn(0, 0, cx, (cy - listBoxBottomOffset - topOfListBox));
 
 		m_lstHeader.SetWindowRgn(rgnRect, TRUE);
 	}
@@ -726,8 +733,8 @@ void CQPasteWnd::MoveControls()
 		m_modernScrollBar.ShowWindow(SW_HIDE);
 		m_modernScrollBarHorz.ShowWindow(SW_HIDE);
 
-		auto border = m_DittoWindow.m_dpi.Scale(10);
-		m_noSearchResultsStatic.MoveWindow(border, topOfListBox + border, cx - border, cy - listBoxBottomOffset - topOfListBox + 1 - border);
+		auto border = m_DittoWindow.m_dpi.Scale(24);
+		m_noSearchResultsStatic.MoveWindow(border, topOfListBox + border, cx - (border * 2), cy - listBoxBottomOffset - topOfListBox + 1 - (border * 2));
 	}
 	else
 	{
@@ -760,11 +767,20 @@ void CQPasteWnd::MoveControls()
 			m_modernScrollBarHorz.Hide(false);
 		}
 	}
-	m_search.MoveWindow(m_DittoWindow.m_dpi.Scale(34), cy - m_DittoWindow.m_dpi.Scale(searchRowStart - 5), cx - m_DittoWindow.m_dpi.Scale(70), m_DittoWindow.m_dpi.Scale(25));
+	int bottomBarPadding = m_DittoWindow.m_dpi.Scale(10);
+	int actionButtonSize = m_DittoWindow.m_dpi.Scale(30);
+	int searchHeight = m_DittoWindow.m_dpi.Scale(32);
+	int actionButtonTop = cy - bottomBarPadding - actionButtonSize;
+	int actionButtonLeft = m_DittoWindow.m_dpi.Scale(10);
+	int actionButtonRight = cx - m_DittoWindow.m_dpi.Scale(10) - actionButtonSize;
+	int searchLeft = actionButtonLeft + actionButtonSize + m_DittoWindow.m_dpi.Scale(10);
+	int searchTop = cy - bottomBarPadding - searchHeight;
+	int searchWidth = max(m_DittoWindow.m_dpi.Scale(120), actionButtonRight - m_DittoWindow.m_dpi.Scale(10) - searchLeft);
+	m_search.MoveWindow(searchLeft, searchTop, searchWidth, searchHeight);
 
-	m_systemMenu.MoveWindow(cx - m_DittoWindow.m_dpi.Scale(30), cy - m_DittoWindow.m_dpi.Scale(28), m_DittoWindow.m_dpi.Scale(24), m_DittoWindow.m_dpi.Scale(24));
+	m_systemMenu.MoveWindow(actionButtonRight, actionButtonTop, actionButtonSize, actionButtonSize);
 
-	m_ShowGroupsFolderBottom.MoveWindow(m_DittoWindow.m_dpi.Scale(4), cy - m_DittoWindow.m_dpi.Scale(28), m_DittoWindow.m_dpi.Scale(24), m_DittoWindow.m_dpi.Scale(24));
+	m_ShowGroupsFolderBottom.MoveWindow(actionButtonLeft, actionButtonTop, actionButtonSize, actionButtonSize);
 
 	/*if (CGetSetOptions::m_bShowPersistent &&
 		CGetSetOptions::m_bShowAlwaysOnTopWarning)
@@ -2139,11 +2155,12 @@ void CQPasteWnd::UpdateFont()
 	m_groupFont.DeleteObject();
 	m_groupFont.CreateFont(-m_DittoWindow.m_dpi.Scale(12), 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
 	m_stGroup.SetFont(&m_groupFont);
-	m_stGroup.SetBkColor(CGetSetOptions::m_Theme.MainWindowBG());
-	m_stGroup.SetTextColor(CGetSetOptions::m_Theme.ListBoxEvenRowsText());
+	m_stGroup.SetBkColor(CGetSetOptions::m_Theme.GroupHeaderBackground());
+	m_stGroup.SetTextColor(CGetSetOptions::m_Theme.GroupHeaderText());
 
-	m_noSearchResultsStatic.SetBkColor(CGetSetOptions::m_Theme.MainWindowBG());
-	m_noSearchResultsStatic.SetTextColor(CGetSetOptions::m_Theme.ListBoxEvenRowsText());
+	m_noSearchResultsStatic.SetBkColor(CGetSetOptions::m_Theme.EmptyStateBackground());
+	m_noSearchResultsStatic.SetTextColor(CGetSetOptions::m_Theme.GroupHeaderText());
+	m_search.SetPromptTextColor(CGetSetOptions::m_Theme.SearchBarInactiveText());
 	m_noSearchResultsStatic.SetFont(&m_SearchFont);
 
 	m_lstHeader.CreateSmallFont();
@@ -6602,16 +6619,24 @@ BOOL CQPasteWnd::OnEraseBkgnd(CDC* pDC)
 {
 	CRect rect;
 	GetClientRect(&rect);
-	CBrush myBrush(CGetSetOptions::m_Theme.MainWindowBG());    // dialog background color
-	CBrush* pOld = pDC->SelectObject(&myBrush);
-	BOOL bRes = pDC->PatBlt(0, 0, rect.Width(), rect.Height(), PATCOPY);
-	pDC->SelectObject(pOld);    // restore old brush
-	return bRes;                       // CDialog::OnEraseBkgnd(pDC);
+	pDC->FillSolidRect(rect, CGetSetOptions::m_Theme.MainWindowBG());
 
-	//return TRUE;
-	// TODO: Add your message handler code here and/or call default
+	const int bottomBarHeight = m_DittoWindow.m_dpi.Scale(40);
+	if(rect.Height() > bottomBarHeight)
+	{
+		const int bottomBarTop = rect.bottom - bottomBarHeight;
+		pDC->FillSolidRect(0, bottomBarTop, rect.Width(), bottomBarHeight, CGetSetOptions::m_Theme.SearchBarBackground());
+		pDC->FillSolidRect(0, bottomBarTop, rect.Width(), 1, CGetSetOptions::m_Theme.SearchBarBorder());
+	}
 
-	//return CWndEx::OnEraseBkgnd(pDC);
+	if(theApp.m_GroupID > 0)
+	{
+		const int groupHeaderHeight = m_DittoWindow.m_dpi.Scale(32);
+		pDC->FillSolidRect(0, 0, rect.Width(), groupHeaderHeight, CGetSetOptions::m_Theme.GroupHeaderBackground());
+		pDC->FillSolidRect(0, groupHeaderHeight - 1, rect.Width(), 1, CGetSetOptions::m_Theme.ListBorder());
+	}
+
+	return TRUE;
 }
 
 void CQPasteWnd::OnQuickoptionsShowintaskbar()

@@ -19,7 +19,7 @@ IMPLEMENT_DYNAMIC(CSymbolEdit, CEdit)
 CSymbolEdit::CSymbolEdit() :
 	m_hSymbolIcon(NULL),
 	m_bInternalIcon(false),
-	m_colorPromptText(RGB(127, 127, 127)),
+	m_colorPromptText(RGB(120, 128, 140)),
 	m_centerTextDiff(0)
 {
 	m_fontPrompt.CreateFont(
@@ -451,7 +451,7 @@ void CSymbolEdit::RecalcLayout()
 	{
 		if (m_windowDpi != NULL)
 		{
-			SetMargins(m_windowDpi->Scale(4), m_windowDpi->Scale(34));
+			SetMargins(m_windowDpi->Scale(12), m_windowDpi->Scale(40));
 		}
 	}
 }
@@ -463,14 +463,31 @@ void CSymbolEdit::OnPaint()
 	CRect rect;
 	GetClientRect(&rect);
 
+	CString text;
+	GetWindowText(text);
+	bool hasFocus = (this == GetFocus());
+	bool hasText = (text.GetLength() > 0);
+
 	DWORD margins = GetMargins();
 	
 	CRect textRect(rect);
 	textRect.left += LOWORD(margins);
 	textRect.right -= HIWORD(margins);
 
-	// Clearing the background
-	dc.FillSolidRect(rect, GetSysColor(COLOR_WINDOW));	
+	CRect borderRect(rect);
+	borderRect.DeflateRect(0, 0, 1, 1);
+	int cornerRadius = m_windowDpi ? m_windowDpi->Scale(12) : 12;
+
+	COLORREF fillColor = hasFocus || hasText ? CGetSetOptions::m_Theme.SearchTextBoxFocusBG() : CGetSetOptions::m_Theme.SearchBarBackground();
+	COLORREF borderColor = hasFocus ? CGetSetOptions::m_Theme.SearchTextBoxFocusBorder() : CGetSetOptions::m_Theme.SearchBarBorder();
+
+	CPen borderPen(PS_SOLID, 1, borderColor);
+	CPen* pOldPen = dc.SelectObject(&borderPen);
+	CBrush fillBrush(fillColor);
+	CBrush* pOldBrush = dc.SelectObject(&fillBrush);
+	dc.RoundRect(borderRect.left, borderRect.top, borderRect.right, borderRect.bottom, cornerRadius, cornerRadius);
+	dc.SelectObject(pOldBrush);
+	dc.SelectObject(pOldPen);
 
 	if (m_hSymbolIcon)
 	{
@@ -498,38 +515,20 @@ void CSymbolEdit::OnPaint()
 		//rect.right -= (HIWORD(dwMargins) + 1);
 	}
 
-	CString text;
-	GetWindowText(text);
 	CFont* oldFont = NULL;
 
-	//rect.top += 1;
-
-
-	if(this == GetFocus() || text.GetLength() > 0)
+	if(hasFocus || hasText)
 	{
-		dc.FillSolidRect(rect, CGetSetOptions::m_Theme.SearchTextBoxFocusBG());
-
-		//CBrush borderBrush(CGetSetOptions::m_Theme.SearchTextBoxFocusBorder());
-		//dc.FrameRect(rect, &borderBrush);
-
-		//rect.DeflateRect(1, 1, 1, 1);
-		//textRect.DeflateRect(0, 1, 1, 1);
-
 		oldFont = dc.SelectObject(GetFont());		
 
 		COLORREF oldColor = dc.GetTextColor();
 		dc.SetTextColor(CGetSetOptions::m_Theme.SearchTextBoxFocusText());
-			
-		dc.DrawText(text, textRect, DT_SINGLELINE | DT_INTERNAL | DT_EDITCONTROL | DT_NOPREFIX);
+		dc.SetBkMode(TRANSPARENT);
+		dc.DrawText(text, textRect, DT_SINGLELINE | DT_VCENTER | DT_EDITCONTROL | DT_NOPREFIX);
 
 		dc.SelectObject(oldFont);
 		dc.SetTextColor(oldColor);
 	}
-	else
-	{
-		dc.FillSolidRect(rect, CGetSetOptions::m_Theme.MainWindowBG());
-	}
-
 
 	if (text.GetLength() == 0 && m_strPromptText.GetLength() > 0)
 	{
@@ -547,7 +546,7 @@ void CSymbolEdit::OnPaint()
 	}
 
 	int right = rect.right;
-	if ((text.GetLength() > 0 || this == GetFocus()))
+	if (hasText || hasFocus)
 	{
 		m_searchesButtonRect.SetRect(rect.right - m_windowDpi->Scale(18), 0, rect.right, rect.bottom);
 		right = rect.right - m_windowDpi->Scale(18);

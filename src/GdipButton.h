@@ -36,6 +36,12 @@ class CGdiPlusBitmapResource;
 class CGdipButton : public CButton
 {
 public:
+	enum ButtonVisualStyle
+	{
+		ButtonVisualStyle_Transparent = 0,
+		ButtonVisualStyle_RoundedFill
+	};
+
 
 	CGdipButton();
 	virtual ~CGdipButton();
@@ -73,12 +79,14 @@ public:
 	void DeleteToolTip();
 
 	void Reset();
+	void SetVisualStyle(ButtonVisualStyle style);
 
 
 protected:
 
 	void PaintBk(CDC* pDC);
 	void PaintBtn(CDC* pDC);
+	void PaintStateBackground(CDC* pDC, const CRect &rect, BOOL bIsPressed);
 
 	BOOL	m_bHaveAltImage;
 	BOOL	m_bHaveBitmaps;
@@ -87,6 +95,7 @@ protected:
 	BOOL	m_bIsToggle;
 	BOOL	m_bIsHovering;
 	BOOL	m_bIsTracking;
+	ButtonVisualStyle m_visualStyle;
 
 	int		m_nCurType;
 
