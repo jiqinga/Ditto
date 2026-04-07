@@ -130,9 +130,7 @@ bool CSupabaseClient::TestConnection(CString &errorMessage)
 
 	if (statusCode < 200 || statusCode >= 300)
 	{
-		CString responseText = CTextConvert::Utf8ToUnicode(responseBody);
-		errorMessage.Format(_T("Supabase connection test failed with HTTP %ld. Response: %s"), statusCode, responseText);
-		return false;
+		return FormatSupabaseHttpError(statusCode, responseBody, _T("Supabase connection test failed"), errorMessage);
 	}
 
 	errorMessage.Empty();
@@ -183,9 +181,7 @@ bool CSupabaseClient::EnsureRoom(const CString &lookupKey, const CString &roomSa
 	}
 	else
 	{
-		CString responseText = CTextConvert::Utf8ToUnicode(responseBody);
-		errorMessage.Format(_T("Supabase room lookup failed with HTTP %ld. Response: %s"), statusCode, responseText);
-		return false;
+		return FormatSupabaseHttpError(statusCode, responseBody, _T("Supabase room lookup failed"), errorMessage);
 	}
 
 	CStringA requestBody = BuildRoomLookupJson(lookupKey, roomSalt);
@@ -249,9 +245,7 @@ bool CSupabaseClient::EnsureRoom(const CString &lookupKey, const CString &roomSa
 		}
 	}
 
-	CString responseText = CTextConvert::Utf8ToUnicode(responseBody);
-	errorMessage.Format(_T("Supabase room create failed with HTTP %ld. Response: %s"), statusCode, responseText);
-	return false;
+	return FormatSupabaseHttpError(statusCode, responseBody, _T("Supabase room create failed"), errorMessage);
 }
 
 bool CSupabaseClient::UpsertDevice(const CString &roomId, const CString &deviceName, const CString &deviceFingerprint, CString &errorMessage)
@@ -296,9 +290,7 @@ bool CSupabaseClient::UpsertDevice(const CString &roomId, const CString &deviceN
 
 	if (statusCode < 200 || statusCode > 299)
 	{
-		CString responseText = CTextConvert::Utf8ToUnicode(responseBody);
-		errorMessage.Format(_T("Supabase device upsert failed with HTTP %ld. Response: %s"), statusCode, responseText);
-		return false;
+		return FormatSupabaseHttpError(statusCode, responseBody, _T("Supabase device upsert failed"), errorMessage);
 	}
 
 	errorMessage.Empty();
@@ -341,9 +333,7 @@ bool CSupabaseClient::TouchDeviceHeartbeat(const CString &roomId, const CString 
 
 	if (statusCode < 200 || statusCode > 299)
 	{
-		CString responseText = CTextConvert::Utf8ToUnicode(responseBody);
-		errorMessage.Format(_T("Supabase device heartbeat failed with HTTP %ld. Response: %s"), statusCode, responseText);
-		return false;
+		return FormatSupabaseHttpError(statusCode, responseBody, _T("Supabase device heartbeat failed"), errorMessage);
 	}
 
 	errorMessage.Empty();
@@ -394,9 +384,7 @@ bool CSupabaseClient::PostMessage(const CString &roomId, const CString &senderDe
 
 	if (statusCode < 200 || statusCode > 299)
 	{
-		CString responseText = CTextConvert::Utf8ToUnicode(responseBody);
-		errorMessage.Format(_T("Supabase message post failed with HTTP %ld. Response: %s"), statusCode, responseText);
-		return false;
+		return FormatSupabaseHttpError(statusCode, responseBody, _T("Supabase message post failed"), errorMessage);
 	}
 
 	try
@@ -459,9 +447,7 @@ bool CSupabaseClient::ListMessages(const CString &roomId, const CString &created
 
 	if (statusCode < 200 || statusCode >= 300)
 	{
-		CString responseText = CTextConvert::Utf8ToUnicode(responseBody);
-		errorMessage.Format(_T("Supabase list messages failed with HTTP %ld. Response: %s"), statusCode, responseText);
-		return false;
+		return FormatSupabaseHttpError(statusCode, responseBody, _T("Supabase list messages failed"), errorMessage);
 	}
 
 	try
@@ -644,6 +630,40 @@ CStringA CSupabaseClient::BuildMessageJson(const CString &roomId, const CString 
 	payload["payload_inline"] = json::JSON(std::string(payloadInline));
 	payload["payload_hash"] = json::JSON((LPCSTR)CTextConvert::UnicodeToUTF8(payloadHash));
 	return CStringA(payload.dump().c_str());
+}
+
+bool CSupabaseClient::FormatSupabaseHttpError(long statusCode, const CStringA &responseBody, const CString &defaultPrefix, CString &errorMessage) const
+{
+	if (IsMissingSchemaResponse(responseBody))
+	{
+		errorMessage = BuildMissingSchemaMessage();
+		return false;
+	}
+
+	CString responseText = CTextConvert::Utf8ToUnicode(responseBody);
+	responseText.Trim();
+	if (responseText.IsEmpty())
+	{
+		errorMessage.Format(_T("%s with HTTP %ld."), defaultPrefix, statusCode);
+	}
+	else
+	{
+		errorMessage.Format(_T("%s with HTTP %ld. Response: %s"), defaultPrefix, statusCode, responseText);
+	}
+
+	return false;
+}
+
+bool CSupabaseClient::IsMissingSchemaResponse(const CStringA &responseBody) const
+{
+	CString responseText = CTextConvert::Utf8ToUnicode(responseBody);
+	responseText.MakeLower();
+	return responseText.Find(_T("pgrst205")) >= 0 || responseText.Find(_T("public.sync_rooms")) >= 0;
+}
+
+CString CSupabaseClient::BuildMissingSchemaMessage() const
+{
+	return _T("Supabase cloud sync schema is not initialized. Run the SQL in docs/supabase-init.sql in your Supabase project, then test the connection again.");
 }
 
 bool CSupabaseClient::SendJsonRequest(const CString &method, const CString &relativePath, const CStringA *requestBody, const std::vector<CString> &extraHeaders, long &statusCode, CStringA &responseBody, CString &errorMessage) const

@@ -38,6 +38,9 @@ protected:
 	CStringA BuildDeviceJson(const CString &roomId, const CString &deviceName, const CString &deviceFingerprint) const;
 	CStringA BuildMessageJson(const CString &roomId, const CString &senderDeviceId, const CString &contentType, const CStringA &payloadInline, const CString &payloadHash) const;
 	bool SendJsonRequest(const CString &method, const CString &relativePath, const CStringA *requestBody, const std::vector<CString> &extraHeaders, long &statusCode, CStringA &responseBody, CString &errorMessage) const;
+	bool FormatSupabaseHttpError(long statusCode, const CStringA &responseBody, const CString &defaultPrefix, CString &errorMessage) const;
+	bool IsMissingSchemaResponse(const CStringA &responseBody) const;
+	CString BuildMissingSchemaMessage() const;
 
 	CString m_supabaseUrl;
 	CString m_anonKey;
